@@ -1,5 +1,6 @@
 package by.kovalyov.moscowproject.controller;
 
+import by.kovalyov.moscowproject.Dto.HumanDto;
 import by.kovalyov.moscowproject.entity.Human;
 import by.kovalyov.moscowproject.service.HumanService;
 import lombok.RequiredArgsConstructor;
@@ -16,32 +17,49 @@ public class HumanController {
 
     private final HumanService humanService;
 
-    @GetMapping("/all")
+    @GetMapping("/human/all")
     public List<Human> getAllHuman() {
         return humanService.getAllHumans();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/human/{id}")
     public ResponseEntity<Human> getAllHuman(@PathVariable Long id) {
-        Human human = humanService.getHumanById(id);
-        return new ResponseEntity<>(human, HttpStatus.OK);
+        try {
+            Human human = humanService.getHumanById(id);
+            return new ResponseEntity<>(human, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @PostMapping
-    public ResponseEntity<Human> createNewHuman(@RequestBody Human human) {
-        Human newHuman = humanService.createHuman(human);
-        return new ResponseEntity<>(newHuman, HttpStatus.OK);
+    @PostMapping("/human")
+    public ResponseEntity<Human> createNewHuman(@RequestBody HumanDto humanDto) {
+        try {
+            Human newHuman = humanService.createHuman(humanDto);
+            return new ResponseEntity<>(newHuman, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Human> updateHuman(@PathVariable Long id, @RequestBody Human human) {
-        Human updatedHuman = humanService.updateHuman(id, human);
-        return new ResponseEntity<>(updatedHuman, HttpStatus.OK);
+    @PutMapping("/human/{id}")
+    public ResponseEntity<Human> updateHuman(@PathVariable Long id, @RequestBody HumanDto humanDto) {
+        try {
+            Human updatedHuman = humanService.updateHuman(id, humanDto);
+            return new ResponseEntity<>(updatedHuman, HttpStatus.valueOf(204));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/human/{id}")
     public ResponseEntity<Human> deleteHuman(@PathVariable Long id) {
-        Human deletedHuman = humanService.deleteHuman(id);
-        return new ResponseEntity<>(deletedHuman, HttpStatus.OK);
+        try {
+            Human deletedHuman = humanService.deleteHuman(id);
+            return new ResponseEntity<>(deletedHuman, HttpStatus.valueOf(204));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 }

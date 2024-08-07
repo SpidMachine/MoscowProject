@@ -1,5 +1,6 @@
 package by.kovalyov.moscowproject.service;
 
+import by.kovalyov.moscowproject.Dto.HumanDto;
 import by.kovalyov.moscowproject.entity.Human;
 import by.kovalyov.moscowproject.repository.HumanRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,10 @@ public class HumanServiceImpl implements HumanService {
     }
 
     @Override
-    public Human createHuman(Human human) {
+    public Human createHuman(HumanDto humanDto) {
+        Human human = new Human();
+        human.setName(humanDto.getName());
+        human.setAge(human.getAge());
         return humanRepository.save(human);
     }
 
@@ -36,11 +40,11 @@ public class HumanServiceImpl implements HumanService {
     }
 
     @Override
-    public Human updateHuman(Long id, Human human) {
+    public Human updateHuman(Long id, HumanDto humanDto) {
         Human updatedHuman = humanRepository.findById(id).orElseThrow();
 
-        updatedHuman.setName(human.getName());
-        updatedHuman.setAge(human.getAge());
+        updatedHuman.setName(humanDto.getName());
+        updatedHuman.setAge(humanDto.getAge());
         humanRepository.save(updatedHuman);
 
         return updatedHuman;
