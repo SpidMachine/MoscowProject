@@ -3,6 +3,7 @@ package by.kovalyov.moscowproject.controller;
 import by.kovalyov.moscowproject.Dto.HumanDto;
 import by.kovalyov.moscowproject.entity.Human;
 import by.kovalyov.moscowproject.service.HumanService;
+import jdk.javadoc.doclet.Reporter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,14 @@ public class HumanController {
     private final HumanService humanService;
 
     @GetMapping("/human/all")
-    public List<Human> getAllHuman() {
-        return humanService.getAllHumans();
+    public ResponseEntity<List<Human>> getAllHuman() {
+        List<Human> listHumans = humanService.getAllHumans();
+
+        if (listHumans.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(listHumans, HttpStatus.OK);
     }
 
     @GetMapping("/human/{id}")
