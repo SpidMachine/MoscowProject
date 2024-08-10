@@ -28,7 +28,7 @@ public class HumanServiceImpl implements HumanService {
     public Human createHuman(HumanDto humanDto) {
         Human human = new Human();
         human.setName(humanDto.getName());
-        human.setAge(human.getAge());
+        human.setAge(humanDto.getAge());
         return humanRepository.save(human);
     }
 
