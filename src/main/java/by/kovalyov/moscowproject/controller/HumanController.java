@@ -19,8 +19,8 @@ public class HumanController {
     private final HumanService humanService;
 
     @GetMapping("/human/all")
-    public ResponseEntity<List<Human>> getAllHuman() {
-        List<Human> listHumans = humanService.getAllHumans();
+    public ResponseEntity<List<HumanDto>> getAllHuman() {
+        List<HumanDto> listHumans = humanService.getAllHumans();
 
         if (listHumans.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -30,9 +30,9 @@ public class HumanController {
     }
 
     @GetMapping("/human/{id}")
-    public ResponseEntity<Human> getAllHuman(@PathVariable Long id) {
+    public ResponseEntity<HumanDto> getAllHuman(@PathVariable Long id) {
         try {
-            Human human = humanService.getHumanById(id);
+            HumanDto human = humanService.getHumanById(id);
             return new ResponseEntity<>(human, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -40,9 +40,9 @@ public class HumanController {
     }
 
     @PostMapping("/human")
-    public ResponseEntity<Human> createNewHuman(@RequestBody HumanDto humanDto) {
+    public ResponseEntity<HumanDto> createNewHuman(@RequestBody HumanDto humanDto) {
         try {
-            Human newHuman = humanService.createHuman(humanDto);
+            HumanDto newHuman = humanService.createHuman(humanDto);
             return new ResponseEntity<>(newHuman, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -50,19 +50,19 @@ public class HumanController {
     }
 
     @PutMapping("/human/{id}")
-    public ResponseEntity<Human> updateHuman(@PathVariable Long id, @RequestBody HumanDto humanDto) {
+    public ResponseEntity<HumanDto> updateHuman(@PathVariable Long id, @RequestBody HumanDto humanDto) {
         try {
-            Human updatedHuman = humanService.updateHuman(id, humanDto);
-            return new ResponseEntity<>(updatedHuman, HttpStatus.valueOf(204));
+            HumanDto updatedHuman = humanService.updateHuman(id, humanDto);
+            return new ResponseEntity<>(updatedHuman, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/human/{id}")
-    public ResponseEntity<Human> deleteHuman(@PathVariable Long id) {
+    public ResponseEntity<HumanDto> deleteHuman(@PathVariable Long id) {
         try {
-            Human deletedHuman = humanService.deleteHuman(id);
+            HumanDto deletedHuman = humanService.deleteHuman(id);
             return new ResponseEntity<>(deletedHuman, HttpStatus.valueOf(204));
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -6,9 +6,9 @@ import by.kovalyov.moscowproject.entity.Human;
 import java.util.List;
 
 public interface HumanService {
-    Human getHumanById(Long id);
-    List<Human> getAllHumans();
-    Human createHuman(HumanDto humanDto);
-    Human deleteHuman(Long id);
-    Human updateHuman(Long id, HumanDto humanDto);
+    HumanDto getHumanById(Long id);
+    List<HumanDto> getAllHumans();
+    HumanDto createHuman(HumanDto humanDto);
+    HumanDto deleteHuman(Long id);
+    HumanDto updateHuman(Long id, HumanDto humanDto);
 }

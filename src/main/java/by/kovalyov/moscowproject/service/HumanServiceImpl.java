@@ -2,11 +2,14 @@ package by.kovalyov.moscowproject.service;
 
 import by.kovalyov.moscowproject.Dto.HumanDto;
 import by.kovalyov.moscowproject.entity.Human;
+import by.kovalyov.moscowproject.mapper.HumanMapper;
 import by.kovalyov.moscowproject.repository.HumanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -15,38 +18,44 @@ public class HumanServiceImpl implements HumanService {
     private final HumanRepository humanRepository;
 
     @Override
-    public Human getHumanById(Long id) {
-        return humanRepository.findById(id).orElseThrow();
+    public HumanDto getHumanById(Long id) {
+        Human human = humanRepository.findById(id).orElseThrow();
+        return HumanMapper.mapToHumanDto(human);
     }
 
     @Override
-    public List<Human> getAllHumans() {
-        return humanRepository.findAll();
+    public List<HumanDto> getAllHumans() {
+        List<Human> humanList = humanRepository.findAll();
+        return humanList.stream().map(HumanMapper::mapToHumanDto).collect(Collectors.toList());
     }
 
     @Override
-    public Human createHuman(HumanDto humanDto) {
-        Human human = new Human();
-        human.setName(humanDto.getName());
-        human.setAge(humanDto.getAge());
-        return humanRepository.save(human);
+    public HumanDto createHuman(HumanDto humanDto) {
+        Human human = Human.builder()
+                .name(humanDto.getName())
+                .age(humanDto.getAge())
+                .build();
+
+        Human createdHuman = humanRepository.save(human);
+
+        return HumanMapper.mapToHumanDto(createdHuman);
     }
 
     @Override
-    public Human deleteHuman(Long id) {
+    public HumanDto deleteHuman(Long id) {
         Human human = humanRepository.findById(id).orElseThrow();
         humanRepository.deleteById(id);
-        return human;
+        return HumanMapper.mapToHumanDto(human);
     }
 
     @Override
-    public Human updateHuman(Long id, HumanDto humanDto) {
-        Human updatedHuman = humanRepository.findById(id).orElseThrow();
+    public HumanDto updateHuman(Long id, HumanDto humanDto) {
+        Human existingHuman = humanRepository.findById(id).orElseThrow();
 
-        updatedHuman.setName(humanDto.getName());
-        updatedHuman.setAge(humanDto.getAge());
-        humanRepository.save(updatedHuman);
+        existingHuman.setName(humanDto.getName());
+        existingHuman.setAge(humanDto.getAge());
+        Human updatedHuman = humanRepository.save(existingHuman);
 
-        return updatedHuman;
+        return HumanMapper.mapToHumanDto(updatedHuman);
     }
 }

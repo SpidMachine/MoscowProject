@@ -1,8 +1,10 @@
 package by.kovalyov.moscowproject.repository;
 
 import by.kovalyov.moscowproject.entity.Human;
+import by.kovalyov.moscowproject.service.HumanService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -16,6 +18,9 @@ public class HumanRepositoryTest {
 
     @Autowired
     private HumanRepository humanRepository;
+
+    @Mock
+    private HumanService humanService;
 
     @Test
     public void humanRepository_save_returnSavedHuman() {
