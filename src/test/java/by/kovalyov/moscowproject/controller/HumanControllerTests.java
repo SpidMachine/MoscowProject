@@ -33,7 +33,8 @@ public class HumanControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private List<HumanDto> getAllHuman() {
+    @Test
+    void shouldReturnAllBooks() throws Exception {
         HumanDto human = HumanDto.builder()
                 .name("test")
                 .age(10)
@@ -44,12 +45,22 @@ public class HumanControllerTests {
                 .age(20)
                 .build();
 
-        return List.of(human, human1);
+        List<HumanDto> list = List.of(human, human1);
+
+        Mockito.when(humanService.getAllHumans()).thenReturn(list);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/human/all"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2))
+                .andDo(print());
     }
 
     @Test
     void shouldReturnHumanById() throws Exception {
-        HumanDto human = new HumanDto(1L, "test", 10);
+        HumanDto human = HumanDto.builder()
+                .id(1L)
+                .name("test")
+                .age(10)
+                .build();
 
         Mockito.when(humanService.getHumanById(human.getId())).thenReturn(human);
 
@@ -63,10 +74,13 @@ public class HumanControllerTests {
 
     @Test
     void shouldCreateHuman() throws Exception {
-        HumanDto humanDto = new HumanDto(1L, "test", 10);
+        HumanDto human = HumanDto.builder()
+                .name("test")
+                .age(10)
+                .build();
 
         mockMvc.perform(post("/api/human").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(humanDto)))
+                        .content(objectMapper.writeValueAsString(human)))
                 .andExpect(status().isCreated())
                 .andDo(print());
     }
@@ -75,12 +89,21 @@ public class HumanControllerTests {
     void shouldUpdateHuman() throws Exception {
         long id = 1;
 
-        HumanDto humanDto = new HumanDto(id, "test", 10);
-        HumanDto updatedHuman = new HumanDto(id, "testik", 20);
+        HumanDto human = HumanDto.builder()
+                .id(id)
+                .name("test")
+                .age(10)
+                .build();
 
-        Mockito.when(humanService.updateHuman(humanDto.getId(), updatedHuman)).thenReturn(updatedHuman);
+        HumanDto updatedHuman = HumanDto.builder()
+                .id(id)
+                .name("testik")
+                .age(20)
+                .build();
 
-        mockMvc.perform(put("/api/human/{id}", humanDto.getId()).contentType(MediaType.APPLICATION_JSON)
+        Mockito.when(humanService.updateHuman(human.getId(), updatedHuman)).thenReturn(updatedHuman);
+
+        mockMvc.perform(put("/api/human/{id}", human.getId()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedHuman)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(updatedHuman.getId()))
@@ -96,15 +119,6 @@ public class HumanControllerTests {
         Mockito.when(humanService.deleteHuman(humanDto.getId())).thenReturn(humanDto);
         mockMvc.perform(delete("/api/human/{id}", humanDto.getId()))
                 .andExpect(status().isNoContent())
-                .andDo(print());
-    }
-
-    @Test
-    void shouldReturnAllBooks() throws Exception {
-        Mockito.when(humanService.getAllHumans()).thenReturn(getAllHuman());
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/human/all"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2))
                 .andDo(print());
     }
 

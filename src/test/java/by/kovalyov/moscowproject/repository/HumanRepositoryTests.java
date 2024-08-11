@@ -14,13 +14,10 @@ import java.util.List;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-public class HumanRepositoryTest {
+public class HumanRepositoryTests {
 
     @Autowired
     private HumanRepository humanRepository;
-
-    @Mock
-    private HumanService humanService;
 
     @Test
     public void humanRepository_save_returnSavedHuman() {
