@@ -6,6 +6,10 @@ import by.kovalyov.moscowproject.entity.Human;
 public class HumanMapper {
 
     public static HumanDto mapToHumanDto(Human human) {
+        if (human == null) {
+            return null;
+        }
+
         return new HumanDto(
                 human.getId(),
                 human.getName(),
