@@ -32,11 +32,6 @@ public class HumanControllerMockMvcIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @AfterEach
-    public void resetDb() {
-        humanRepository.deleteAll();
-    }
-
     @Test
     void givenHuman_whenAdd_thenStatus201andHumanReturned() throws Exception {
         Human testHuman = createTestHuman(new Human(1L, "test", 10));
