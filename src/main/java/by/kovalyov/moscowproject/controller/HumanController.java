@@ -13,12 +13,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/human")
 public class HumanController {
 
     private final HumanService humanService;
 
-    @GetMapping("/human/all")
+    @GetMapping("/all")
     public ResponseEntity<List<HumanDto>> getAllHuman() {
         List<HumanDto> listHumans = humanService.getAllHumans();
 
@@ -29,8 +29,8 @@ public class HumanController {
         return new ResponseEntity<>(listHumans, HttpStatus.OK);
     }
 
-    @GetMapping("/human/{id}")
-    public ResponseEntity<HumanDto> getAllHuman(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<HumanDto> getHumanById(@PathVariable Long id) {
         try {
             HumanDto human = humanService.getHumanById(id);
             return new ResponseEntity<>(human, HttpStatus.OK);
@@ -39,7 +39,7 @@ public class HumanController {
         }
     }
 
-    @PostMapping("/human")
+    @PostMapping
     public ResponseEntity<HumanDto> createNewHuman(@RequestBody HumanDto humanDto) {
         try {
             HumanDto newHuman = humanService.createHuman(humanDto);
@@ -49,7 +49,7 @@ public class HumanController {
         }
     }
 
-    @PutMapping("/human/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<HumanDto> updateHuman(@PathVariable Long id, @RequestBody HumanDto humanDto) {
         try {
             HumanDto updatedHuman = humanService.updateHuman(id, humanDto);
@@ -59,7 +59,7 @@ public class HumanController {
         }
     }
 
-    @DeleteMapping("/human/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HumanDto> deleteHuman(@PathVariable Long id) {
         try {
             HumanDto deletedHuman = humanService.deleteHuman(id);

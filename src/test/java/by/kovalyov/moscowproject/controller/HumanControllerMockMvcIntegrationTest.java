@@ -3,7 +3,7 @@ package by.kovalyov.moscowproject.controller;
 import by.kovalyov.moscowproject.entity.Human;
 import by.kovalyov.moscowproject.repository.HumanRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -46,6 +46,7 @@ public class HumanControllerMockMvcIntegrationTest {
                 .andExpect(jsonPath("$.name").value("test"))
                 .andExpect(jsonPath("$.age").value(10))
                 .andDo(print());
+        Assertions.assertThat(humanRepository.findById(testHuman.getId())).isNotNull();
     }
 
     @Test
@@ -59,6 +60,7 @@ public class HumanControllerMockMvcIntegrationTest {
                 .andExpect(jsonPath("$.name").value("test"))
                 .andExpect(jsonPath("$.age").value(10))
                 .andDo(print());
+        Assertions.assertThat(humanRepository.findById(humanId)).isNotNull();
     }
 
     @Test
@@ -74,19 +76,29 @@ public class HumanControllerMockMvcIntegrationTest {
                 .andExpect(jsonPath("$.name").value("testik"))
                 .andExpect(jsonPath("$.age").value(20))
                 .andDo(print());
+        Assertions.assertThat(humanRepository.findById(human.getId())).isNotNull();
+        Assertions.assertThat(humanRepository.findFirstByName(human.getName())).isEqualTo(human);
     }
 
     @Test
     void givenId_whenDelete_thenStatus204andDeletedHumanReturns() throws Exception {
-        long humanId = createTestHuman(new Human(1L, "test", 10)).getId();
+        Human human = createTestHuman(new Human(1L, "test", 10));
 
         mockMvc.perform(
-                        delete("/api/human/{id}", humanId))
+                        delete("/api/human/{id}", human.getId()))
                 .andExpect(status().is(204))
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value("test"))
                 .andExpect(jsonPath("$.age").value(10))
                 .andDo(print());
+        Assertions.assertThat(humanRepository.findFirstByName("test")).isNull();
+    }
+
+    @Test
+    void givenId_whenDelete_thenStatus404anExceptionThrow() throws Exception {
+        mockMvc.perform(
+                        get("/api/human/1"))
+                .andExpect(status().isNotFound());
     }
 
 
