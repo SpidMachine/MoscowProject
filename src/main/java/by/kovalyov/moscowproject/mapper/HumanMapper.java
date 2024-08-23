@@ -1,6 +1,6 @@
 package by.kovalyov.moscowproject.mapper;
 
-import by.kovalyov.moscowproject.Dto.HumanDto;
+import by.kovalyov.moscowproject.dto.HumanDto;
 import by.kovalyov.moscowproject.entity.Human;
 
 public class HumanMapper {

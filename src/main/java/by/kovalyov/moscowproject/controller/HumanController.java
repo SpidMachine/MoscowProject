@@ -1,9 +1,7 @@
 package by.kovalyov.moscowproject.controller;
 
-import by.kovalyov.moscowproject.Dto.HumanDto;
-import by.kovalyov.moscowproject.entity.Human;
+import by.kovalyov.moscowproject.dto.HumanDto;
 import by.kovalyov.moscowproject.service.HumanService;
-import jdk.javadoc.doclet.Reporter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

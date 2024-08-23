@@ -1,6 +1,6 @@
 package by.kovalyov.moscowproject.service;
 
-import by.kovalyov.moscowproject.Dto.HumanDto;
+import by.kovalyov.moscowproject.dto.HumanDto;
 import by.kovalyov.moscowproject.entity.Human;
 import by.kovalyov.moscowproject.mapper.HumanMapper;
 import by.kovalyov.moscowproject.repository.HumanRepository;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor

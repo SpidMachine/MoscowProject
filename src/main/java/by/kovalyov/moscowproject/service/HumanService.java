@@ -1,7 +1,6 @@
 package by.kovalyov.moscowproject.service;
 
-import by.kovalyov.moscowproject.Dto.HumanDto;
-import by.kovalyov.moscowproject.entity.Human;
+import by.kovalyov.moscowproject.dto.HumanDto;
 
 import java.util.List;
 

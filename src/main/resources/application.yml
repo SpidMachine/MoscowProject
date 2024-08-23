@@ -1,0 +1,27 @@
+spring:
+
+  application:
+    name: MoscowProject
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/moscowProjectDB
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+
+
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: my-group-id
+
+#io:
+#  reflectoring:
+#    kafka:
+#      bootstrap-servers: localhost:9092
