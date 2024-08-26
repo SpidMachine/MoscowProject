@@ -1,4 +1,15 @@
 spring:
+  cloud:
+    stream:
+      default-binder: kafka
+      bindings:
+        sendToKafka-out-0:
+          destination: output-topic
+        getFromKafka-in-0:
+          destination: output-topic
+      kafka:
+        binder:
+          brokers: localhost:9092
 
   application:
     name: MoscowProject
@@ -19,7 +30,7 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
-      group-id: my-group-id
+      group-id: myGroup
 
 #io:
 #  reflectoring:

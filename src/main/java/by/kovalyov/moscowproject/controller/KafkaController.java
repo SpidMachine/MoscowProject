@@ -3,10 +3,8 @@ package by.kovalyov.moscowproject.controller;
 import by.kovalyov.moscowproject.dto.HumanDto;
 import by.kovalyov.moscowproject.service.kafka.KafkaSenderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.Message;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.function.Supplier;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,6 +14,6 @@ public class KafkaController {
 
     @GetMapping("/send")
     public void sendMessage() {
-        kafkaSenderService.sendMessage("my-topic", "hello kafka");
+        kafkaSenderService.sendMessage(new HumanDto(1L, "kafka", 10));
     }
 }
