@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/human")
+@RequestMapping("/api/humans")
 public class HumanController {
 
     private final HumanService humanService;

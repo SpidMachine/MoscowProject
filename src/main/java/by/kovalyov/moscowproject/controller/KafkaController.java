@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/producer")
+@RequestMapping("/api/producers")
 @RequiredArgsConstructor
 public class KafkaController {
 
