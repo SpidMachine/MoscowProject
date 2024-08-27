@@ -37,7 +37,7 @@ public class HumanController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<HumanDto> createNewHuman(@RequestBody HumanDto humanDto) {
         try {
             HumanDto newHuman = humanService.createHuman(humanDto);

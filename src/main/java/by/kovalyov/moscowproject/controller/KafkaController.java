@@ -1,19 +1,19 @@
 package by.kovalyov.moscowproject.controller;
 
 import by.kovalyov.moscowproject.dto.HumanDto;
-import by.kovalyov.moscowproject.service.kafka.KafkaSenderService;
+import by.kovalyov.moscowproject.service.kafka.KafkaProducerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/producer")
 @RequiredArgsConstructor
 public class KafkaController {
 
-    private final KafkaSenderService kafkaSenderService;
+    private final KafkaProducerService kafkaProducerService;
 
-    @GetMapping("/send")
-    public void sendMessage() {
-        kafkaSenderService.sendMessage(new HumanDto(1L, "kafka", 10));
+    @PostMapping("/send-message")
+    public void sendMessage(@RequestBody HumanDto humanDto) {
+        kafkaProducerService.sendMessage(humanDto);
     }
 }

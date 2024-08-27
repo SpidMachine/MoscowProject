@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class KafkaSenderService {
+public class KafkaProducerService {
 
     private final StreamBridge streamBridge;
 
