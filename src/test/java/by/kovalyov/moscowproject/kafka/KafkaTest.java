@@ -51,7 +51,7 @@ public class KafkaTest {
         HumanDto humanDto = new HumanDto(1L, "kafkaProd", 22);
 
         mockMvc.perform(
-                post("/api/producer/send-message").contentType(MediaType.APPLICATION_JSON)
+                post("/api/producers/send-message").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(humanDto)));
         boolean messageConsumed = consumer.getLatch()
                 .await(5, TimeUnit.SECONDS);
