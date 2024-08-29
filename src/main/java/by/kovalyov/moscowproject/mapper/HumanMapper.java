@@ -11,7 +11,6 @@ public class HumanMapper {
         }
 
         return new HumanDto(
-                human.getId(),
                 human.getName(),
                 human.getAge()
         );
@@ -19,7 +18,7 @@ public class HumanMapper {
 
     public static Human mapToHuman(HumanDto humanDto) {
         return new Human(
-                humanDto.getId(),
+                1L,
                 humanDto.getName(),
                 humanDto.getAge()
         );
