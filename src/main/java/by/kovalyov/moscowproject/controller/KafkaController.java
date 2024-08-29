@@ -1,32 +1,26 @@
 package by.kovalyov.moscowproject.controller;
 
 import by.kovalyov.moscowproject.dto.HumanDto;
-import by.kovalyov.moscowproject.service.kafka.KafkaConsumerService;
 import by.kovalyov.moscowproject.service.kafka.KafkaProducerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import static by.kovalyov.moscowproject.controller.KafkaController.PATH;
 
 @RestController
-@RequestMapping("/api/messages")
+@RequestMapping(PATH)
 @RequiredArgsConstructor
 public class KafkaController {
 
+    public static final String PATH = "/api/messages";
+
     private final KafkaProducerService kafkaProducerService;
-    private final KafkaConsumerService kafkaConsumerService;
 
     @PostMapping
     public void sendMessage(@RequestBody HumanDto humanDto) {
         kafkaProducerService.sendMessage(humanDto);
-    }
-
-    @GetMapping
-    public ResponseEntity<HumanDto> getMessage() {
-        try {
-            return new ResponseEntity<>(kafkaConsumerService.getPayload(), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
     }
 }

@@ -9,14 +9,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static by.kovalyov.moscowproject.controller.HumanController.PATH;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/humans")
+@RequestMapping(PATH)
 public class HumanController {
+
+    public static final String PATH = "/api/humans";
+    public static final String ID_PATH = "/{id}";
 
     private final HumanService humanService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<HumanDto>> getAllHuman() {
         List<HumanDto> listHumans = humanService.getAllHumans();
 
@@ -27,7 +32,7 @@ public class HumanController {
         return new ResponseEntity<>(listHumans, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(ID_PATH)
     public ResponseEntity<HumanDto> getHumanById(@PathVariable Long id) {
         try {
             HumanDto human = humanService.getHumanById(id);
@@ -37,7 +42,7 @@ public class HumanController {
         }
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<HumanDto> createNewHuman(@RequestBody HumanDto humanDto) {
         try {
             HumanDto newHuman = humanService.createHuman(humanDto);
@@ -47,7 +52,7 @@ public class HumanController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(ID_PATH)
     public ResponseEntity<HumanDto> updateHuman(@PathVariable Long id, @RequestBody HumanDto humanDto) {
         try {
             HumanDto updatedHuman = humanService.updateHuman(id, humanDto);
@@ -57,7 +62,7 @@ public class HumanController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ID_PATH)
     public ResponseEntity<HumanDto> deleteHuman(@PathVariable Long id) {
         try {
             HumanDto deletedHuman = humanService.deleteHuman(id);

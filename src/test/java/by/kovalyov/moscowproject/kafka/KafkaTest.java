@@ -1,10 +1,9 @@
 package by.kovalyov.moscowproject.kafka;
 
-import by.kovalyov.moscowproject.dto.HumanDto;
-import by.kovalyov.moscowproject.service.HumanService;
-import by.kovalyov.moscowproject.service.kafka.KafkaConsumerService;
+import by.kovalyov.moscowproject.entity.Human;
+import by.kovalyov.moscowproject.repository.HumanRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -12,27 +11,19 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.concurrent.TimeUnit;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
 @DirtiesContext
 @AutoConfigureMockMvc
-@EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
+@EmbeddedKafka(partitions = 1, topics = {"" }, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class KafkaTest {
-
-    @Autowired
-    private KafkaConsumerService consumer;
-
-    @Autowired
-    private HumanService humanService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -40,21 +31,17 @@ public class KafkaTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @BeforeEach
-    void setup() {
-        consumer.resetLatch();
-    }
+    @Autowired
+    private HumanRepository humanRepository;
 
     @Test
     public void givenHumanDto_whenSendingEntityWithEndPointWithSimpleProducer_thenMessageEqualsToDataFromDB() throws Exception {
-        HumanDto humanDto = new HumanDto(1L, "kafkaProd", 22);
+        Human human = new Human(1L, "kafkaProd", 22);
 
         mockMvc.perform(
                 post("/api/messages").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(humanDto)));
-        boolean consumedMessage = consumer.getLatch().await(5, TimeUnit.SECONDS);
+                        .content(objectMapper.writeValueAsString(human)));
 
-        assertThat(consumedMessage).isTrue();
-        assertThat(humanService.getHumanById(humanDto.getId())).isNotNull();
+        Assertions.assertThat(humanRepository.findFirstByName("kafkaProd")).isEqualTo(human);
     }
 }
