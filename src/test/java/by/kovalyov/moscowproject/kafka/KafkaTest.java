@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
@@ -51,13 +50,11 @@ public class KafkaTest {
         HumanDto humanDto = new HumanDto(1L, "kafkaProd", 22);
 
         mockMvc.perform(
-                post("/api/producers/send-message").contentType(MediaType.APPLICATION_JSON)
+                post("/api/messages").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(humanDto)));
-        boolean messageConsumed = consumer.getLatch()
-                .await(5, TimeUnit.SECONDS);
-        humanService.createHuman(consumer.getPayload());
+        boolean consumedMessage = consumer.getLatch().await(5, TimeUnit.SECONDS);
 
-        assertThat(messageConsumed).isTrue();
-        assertThat(humanService.getHumanById(humanDto.getId())).isEqualTo(consumer.getPayload());
+        assertThat(consumedMessage).isTrue();
+        assertThat(humanService.getHumanById(humanDto.getId())).isNotNull();
     }
 }

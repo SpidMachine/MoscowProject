@@ -1,6 +1,7 @@
 package by.kovalyov.moscowproject.service.kafka;
 
 import by.kovalyov.moscowproject.dto.HumanDto;
+import by.kovalyov.moscowproject.service.HumanService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;
@@ -17,9 +18,11 @@ public class KafkaConsumerService {
 
     private CountDownLatch latch = new CountDownLatch(1);
 
+    private final HumanService humanService;
+
     public void receiveMessage(Message<HumanDto> message) {
         payload = message.getPayload();
-        System.out.println("Received Message: " + message.getPayload());
+        humanService.createHuman(message.getPayload());
         latch.countDown();
     }
 
